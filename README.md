@@ -51,15 +51,6 @@ pip install -r requirements.txt
 
 ## Dataset Preparation
 
-### EVT-SPK Dataset
-
-| Subset | Samples | Duration |
-|--------|---------|----------|
-| EVT-SPK-Synth | ~36K | 38 hours |
-| EVT-SPK-Real | ~2.8K | 4 hours |
-
-**Data Split**: 70% Train / 20% Validation / 10% Test
-
 ### Preprocessing Pipeline
 
 **Step 1: Audio Preprocessing**
