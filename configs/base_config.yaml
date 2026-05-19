@@ -1,0 +1,133 @@
+# Base Configuration for EventSpeech
+# Global audio parameters and macro hyperparameters
+
+# Random seed for reproducibility
+seed: 42
+
+# Audio preprocessing
+audio:
+  sample_rate: 22050
+  n_fft: 1024
+  hop_length: 256
+  win_length: 1024
+  n_mels: 80
+  f_min: 0
+  f_max: 8000
+  highpass_freq: 80
+  target_lufs: -23
+
+# Event preprocessing
+events:
+  v2e_contrast_threshold: 0.15
+  v2e_leak_current: 0
+  time_bin_ms: 20
+  height: 260
+  width: 346
+  polarity_channels: 3
+
+# Model architecture
+model:
+  # Event Encoder
+  event_encoder:
+    spatial_channels: [64, 128, 256, 512, 512]
+    bigru_hidden: 512
+    bigru_layers: 1
+    mhfe_heads: 5
+    mhfe_dim: 256
+    output_dim: 256
+
+  # Audio Encoder
+  audio_encoder:
+    mel_channels: 80
+    pitch_proj_dim: 88
+    energy_proj_dim: 88
+    hidden_dim: 256
+    mamba_layers: 3
+    mamba_d_state: 16
+    mamba_expand: 2
+    wavelet_levels: 3
+    wavelet_type: haar
+    output_dim: 256
+
+  # Cross-Modal Alignment
+  alignment:
+    hidden_dim: 256
+    num_heads: 4
+    output_dim: 256
+
+  # VITS Modules
+  vits:
+    prior_encoder:
+      hidden_dim: 256
+      latent_dim: 128
+    posterior_encoder:
+      hidden_dim: 256
+      latent_dim: 128
+    knowledge_bridge:
+      in_channels: 128
+      out_channels: 256
+      num_layers: 3
+
+  # CFM Decoder
+  cfm_decoder:
+    mel_channels: 80
+    hidden_dim: 256
+    time_embed_dim: 128
+    num_dilation_blocks: 20
+    dilation_schedule: [1, 2, 4, 8]
+    kernel_size: 3
+
+# Training
+training:
+  batch_size: 32
+  num_epochs: 200
+  learning_rate: 0.0002
+  warmup_steps: 10000
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  beta1: 0.8
+  beta2: 0.99
+  fp16: true
+  num_workers: 4
+  validation_interval: 5
+  save_interval: 10
+
+# Loss weights
+loss:
+  reconstruction:
+    weight: 1.0
+  kl_divergence:
+    weight_anneal_epochs: 60
+    weight_final: 0.8
+  alignment:
+    weight: 0.3
+  flow_matching:
+    weight: 0.2
+  adversarial:
+    activation_epoch: 90
+    weight: 0.1
+
+# Data augmentation (training only)
+augmentation:
+  temporal_jitter_ms: 5
+  event_dropout_rate: 0.1
+  freq_mask_param: 27
+  time_mask_param: 40
+  pitch_shift_semitones: 2
+  time_stretch_range: [0.9, 1.1]
+
+# Data filtering thresholds
+filtering:
+  silence_ratio_threshold: 0.85
+  av_drift_threshold_ms: 50
+  emotion_confidence_threshold: 0.75
+
+# Safety constants
+safety:
+  epsilon: 1.0e-7
+
+# Checkpointing
+checkpoint:
+  dir: checkpoints
+  best_model_name: best_model.pth
+  save_optimizer: true

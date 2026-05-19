@@ -1,0 +1,34 @@
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Mamba SSM
+mamba-ssm>=1.2.0
+
+# Transformers
+transformers>=4.30.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile
+
+# Experiment tracking
+wandb>=0.15.0
+
+# Distributed training
+accelerate>=0.20.0
+
+# Configuration
+pyyaml
+
+# Numerical computing
+numpy
+scipy
+
+# Logging
+tensorboard
+
+# Utilities
+tqdm
+matplotlib

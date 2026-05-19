@@ -1,0 +1,66 @@
+# EventSpeech Configuration for 6x NVIDIA A100 DDP Training
+# Distributed Data Parallel environment configuration
+
+defaults:
+  - base_config
+
+# DDP Configuration
+ddp:
+  backend: nccl
+  find_unused_parameters: false
+  gradient_as_bucket_view: true
+
+# Hardware optimization for A100
+hardware:
+  tf32: true
+  cudnn_benchmark: true
+  cudnn_deterministic: false
+  gradient_checkpointing: false
+
+# Effective batch size = 32 (6 GPUs, batch_size per GPU adjusted)
+training:
+  batch_size: 6  # per GPU: 32 / 6 ≈ 5.33, round up to 6
+  effective_batch_size: 32
+  num_epochs: 200
+  learning_rate: 0.0002
+  warmup_steps: 10000
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  fp16: true
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+
+# WandB logging
+logging:
+  project: eventspeech
+  entity: null
+  log_interval: 50
+  log_gradients: true
+  log_model_params: false
+
+# HiFi-GAN vocoder fine-tuning
+vocoder:
+  type: hifigan
+  pretrained_path: pretrained/hifigan
+  finetune_epochs: 100
+  freeze_backbone: true
+  learning_rate: 0.0001
+
+# Evaluation
+evaluation:
+  interval_epochs: 5
+  metrics:
+    - mcd
+    - f0_rmse
+    - lse_d
+    - lse_c
+    - wer
+  whisper_model: large-v3
+  syncnet_model: pretrained/syncnet
+
+# Memory optimization
+memory:
+  gradient_checkpointing: false
+  empty_cache_interval: 100
+  max_sequence_length: 512
