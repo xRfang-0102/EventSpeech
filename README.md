@@ -21,7 +21,6 @@
 - [Evaluation](#evaluation)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
-- [Citation](#citation)
 
 ## Installation
 
