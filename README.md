@@ -269,24 +269,6 @@ EventSpeech/
 └── requirements.txt
 ```
 
-## Reproducibility
-
-- Random seed fixed at 42
-- Deterministic CUDA operations
-- Consistent preprocessing between train/inference
-- Use `torch.utils.checkpoint` for memory optimization if needed
-
-## Citation
-
-```bibtex
-@inproceedings{eventspeech2025,
-  title={EventSpeech: Multi-Modal Speech Generation via Neuromorphic Events},
-  author={Anonymous Authors},
-  booktitle={Under Review},
-  year={2025}
-}
-```
-
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+Apache License. See [LICENSE](LICENSE) for details.
